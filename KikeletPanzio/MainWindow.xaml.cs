@@ -57,7 +57,7 @@ namespace KikeletPanzio
 
             if (isVIP)
             {
-                // 3% kedvezmény a VIP ügyfeleknek
+                
                 egysegar = (int)(egysegar * 0.97);
             }
 
@@ -66,6 +66,15 @@ namespace KikeletPanzio
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
+            
+            if (string.IsNullOrWhiteSpace(Nevek.Text) || string.IsNullOrWhiteSpace(Email.Text) ||
+                Szuletes.SelectedDate == null || Szobaszam.SelectedItem == null || Ferohely.SelectedItem == null ||
+                FoglalasKezdete.SelectedDate == null || FoglalasVege.SelectedDate == null)
+            {
+                MessageBox.Show("Kérem, töltse ki az összes mezőt!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             double id = MySlider.Value;
             string name = Nevek.Text;
             string email = Email.Text;
@@ -76,7 +85,6 @@ namespace KikeletPanzio
             DateTime? startDate = FoglalasKezdete.SelectedDate;
             DateTime? endDate = FoglalasVege.SelectedDate;
 
-            // Számoljuk ki a fizetendő összeget a VIP státusz figyelembevételével
             int amount = CalculateAmount(numberOfPeople, isVIP);
 
             var reservation = new Reservation
@@ -89,14 +97,13 @@ namespace KikeletPanzio
                 Szobaszam = roomNumber,
                 Fo = numberOfPeople,
                 Osszeg = amount,
-                Timestamp = DateTime.Now, // A foglalás aktuális időpontja
+                FoglalasIdo = DateTime.Now, 
                 Kezdet = startDate, // Foglalás kezdeti időpontja
                 Vege = endDate // Foglalás záró időpontja
             };
 
             Reservations.Add(reservation);
 
-            // Frissítjük a kijelzett összeget
             Osszeg.Content = amount.ToString() + " Ft";
         }
 
@@ -138,7 +145,7 @@ namespace KikeletPanzio
             public string Szobaszam { get; set; }
             public string Fo { get; set; }
             public int Osszeg { get; set; }
-            public DateTime Timestamp { get; set; } // A foglalás aktuális időpontja
+            public DateTime FoglalasIdo { get; set; } 
             public DateTime? Kezdet { get; set; } // Foglalás kezdeti időpontja
             public DateTime? Vege { get; set; } // Foglalás záró időpontja
         }
