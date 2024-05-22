@@ -6,10 +6,16 @@
         xmlns:local="clr-namespace:KikeletPanzio"
         mc:Ignorable="d"
         Title="Kikelet Panzi" Height="1194" Width="836">
-    <StackPanel Background="SkyBlue">
+    <StackPanel HorizontalAlignment="Center">
+        <StackPanel.Background>
+            <RadialGradientBrush>
+                <GradientStop Color="#FF5E95ED" Offset="1"/>
+                <GradientStop Color="White" Offset="0"/>
+            </RadialGradientBrush>
+        </StackPanel.Background>
         <Label Content="REGISZTRÉCIÓ" Margin="10"/>
         <Label Content="Adja meg az azonosítóját:" Margin="10"/>
-        <Grid  Background="LightBlue">
+        <Grid>
             <Slider x:Name="MySlider" 
                 Minimum="0" Maximum="100" ValueChanged="MySlider_ValueChanged" Margin="10"/>
             <Label x:Name="MyLabel" 
@@ -38,7 +44,7 @@
             <ComboBoxItem Content="3"/>
             <ComboBoxItem Content="4"/>
         </ComboBox>
-        <Grid Margin="10"  Background="LightBlue">
+        <Grid Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -46,9 +52,9 @@
             <Label Content="Fizetendő:" Grid.Column="0"/>
             <Label x:Name="Osszeg" Grid.Column="1"/>
         </Grid>
-        <Grid Background="LightBlue">
-            <DatePicker x:Name="FoglalasKezdete" Margin="613,20,23,0" Width="200"/>
-            <DatePicker x:Name="FoglalasVege" Margin="22,22,614,-2" Width="200"/>
+        <Grid>
+            <DatePicker x:Name="FoglalasKezdete" Margin="613,20,23,0" Width="250"/>
+            <DatePicker x:Name="FoglalasVege" Margin="22,22,614,-2" Width="250"/>
             <Label Content="Foglalás Kezdeti Időpontja:" HorizontalAlignment="Left" Margin="22,0,0,0" VerticalAlignment="Top"/>
             <Label Content="Foglalás Lezáró Időpontja:" HorizontalAlignment="Left" Margin="613,0,0,0" VerticalAlignment="Top"/>
         </Grid>
