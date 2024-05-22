@@ -1,0 +1,56 @@
+﻿<Window x:Class="KikeletPanzio.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KikeletPanzio"
+        mc:Ignorable="d"
+        Title="Kikelet Panzi" Height="1194" Width="836">
+    <StackPanel>
+        <Label Content="REGISZTRÉCIÓ" Margin="10"/>
+        <Label Content="Adja meg az azonosítóját:" Margin="10"/>
+        <Grid>
+            <Slider x:Name="MySlider" 
+                Minimum="0" Maximum="100" ValueChanged="MySlider_ValueChanged" Margin="10"/>
+            <Label x:Name="MyLabel" 
+               VerticalAlignment="Center" HorizontalAlignment="Center" 
+               Margin="0,50,0,0"/>
+        </Grid>
+        <Label Content="Kérem adja meg a nevét:" Margin="10"/>
+        <TextBox x:Name="Nevek" Margin="10"/>
+        <Label Content="Kérem adja meg az E-mail címét:" Margin="10"/>
+        <TextBox x:Name="Email" Margin="10"/>
+        <CheckBox x:Name="VIP" Margin="10" Content="VIP"/>
+        <Label Content="Adja meg a születési dátumát" Margin="10"/>
+        <DatePicker Name="Szuletes" Margin="10"/>
+        <Label Content="Válassza ki, hanyas szobát szeretné választani:" Margin="10"/>
+        <ComboBox x:Name="Szobaszam" Margin="10" SelectionChanged="ComboBox_SelectionChanged">
+            <ComboBoxItem Content="1."/>
+            <ComboBoxItem Content="2."/>
+            <ComboBoxItem Content="3."/>
+            <ComboBoxItem Content="4."/>
+            <ComboBoxItem Content="5."/>
+            <ComboBoxItem Content="6."/>
+        </ComboBox>
+        <Label Content="Kérem válasszon hány főre szeretné (2-4 fő)" Margin="10"/>
+        <ComboBox x:Name="Ferohely" Margin="10" SelectionChanged="ComboBox_SelectionChanged">
+            <ComboBoxItem Content="2"/>
+            <ComboBoxItem Content="3"/>
+            <ComboBoxItem Content="4"/>
+        </ComboBox>
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Fizetendő:" Grid.Column="0"/>
+            <Label x:Name="Osszeg" Grid.Column="1"/>
+        </Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button Content="Foglalás" Width="120" Height="30" Margin="10" Name="Save" Click="Save_Click"/>
+            <Button Content="Mégse" Width="120" Height="30" Margin="10" Name="Megse" Click="Megse_Click"/>
+        </StackPanel>
+        <!-- DataGrid to display saved data -->
+        <DataGrid x:Name="DataGridReservations" AutoGenerateColumns="True" Margin="10"/>
+    </StackPanel>
+</Window>
