@@ -11,6 +11,7 @@ namespace KikeletPanzio
     public partial class MainWindow : Window
     {
         public ObservableCollection<Reservation> Reservations { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -27,60 +28,15 @@ namespace KikeletPanzio
         {
             if (Ferohely.SelectedItem != null)
             {
-                int ferohely = int.Parse((Ferohely.SelectedItem as ComboBoxItem).Content.ToString());
+                string numberOfPeople = (Ferohely.SelectedItem as ComboBoxItem).Content.ToString();
+                bool isVIP = VIP.IsChecked == true;
 
-                int egysegar = 0;
-
-                switch (ferohely)
-                {
-                    case 2:
-                        egysegar = 12000;
-                        break;
-                    case 3:
-                        egysegar = 18000;
-                        break;
-                    case 4:
-                        egysegar = 24000;
-                        break;
-                }
-
-                int osszeg = egysegar;
+                int osszeg = CalculateAmount(numberOfPeople, isVIP);
                 Osszeg.Content = osszeg.ToString() + " Ft";
             }
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
-        {
-            double id = MySlider.Value;
-            string name = Nevek.Text;
-            string email = Email.Text;
-            bool isVIP = VIP.IsChecked == true;
-            DateTime? birthDate = Szuletes.SelectedDate;
-            string roomNumber = (Szobaszam.SelectedItem as ComboBoxItem)?.Content.ToString();
-            string numberOfPeople = (Ferohely.SelectedItem as ComboBoxItem)?.Content.ToString();
-
-            // Calculate the payment amount
-            int amount = CalculateAmount(numberOfPeople);
-
-            var reservation = new Reservation
-            {
-                Id = id,
-                Nev = name,
-                Email = email,
-                VIP = isVIP,
-                Szuletesnap = birthDate,
-                Szobaszam = roomNumber,
-                Fo = numberOfPeople,
-                Osszeg = amount
-            };
-
-            Reservations.Add(reservation);
-
-            // Update the displayed amount
-            Osszeg.Content = amount.ToString() + " Ft";
-        }
-
-        private int CalculateAmount(string numberOfPeople)
+        private int CalculateAmount(string numberOfPeople, bool isVIP)
         {
             int ferohely = int.Parse(numberOfPeople);
 
@@ -99,12 +55,69 @@ namespace KikeletPanzio
                     break;
             }
 
+            if (isVIP)
+            {
+                // 3% kedvezmény a VIP ügyfeleknek
+                egysegar = (int)(egysegar * 0.97);
+            }
+
             return egysegar;
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            double id = MySlider.Value;
+            string name = Nevek.Text;
+            string email = Email.Text;
+            bool isVIP = VIP.IsChecked == true;
+            DateTime? birthDate = Szuletes.SelectedDate;
+            string roomNumber = (Szobaszam.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string numberOfPeople = (Ferohely.SelectedItem as ComboBoxItem)?.Content.ToString();
+            DateTime? startDate = FoglalasKezdete.SelectedDate;
+            DateTime? endDate = FoglalasVege.SelectedDate;
+
+            // Számoljuk ki a fizetendő összeget a VIP státusz figyelembevételével
+            int amount = CalculateAmount(numberOfPeople, isVIP);
+
+            var reservation = new Reservation
+            {
+                Id = id,
+                Nev = name,
+                Email = email,
+                VIP = isVIP,
+                Szuletesnap = birthDate,
+                Szobaszam = roomNumber,
+                Fo = numberOfPeople,
+                Osszeg = amount,
+                Timestamp = DateTime.Now, // A foglalás aktuális időpontja
+                Kezdet = startDate, // Foglalás kezdeti időpontja
+                Vege = endDate // Foglalás záró időpontja
+            };
+
+            Reservations.Add(reservation);
+
+            // Frissítjük a kijelzett összeget
+            Osszeg.Content = amount.ToString() + " Ft";
         }
 
         private void Megse_Click(object sender, RoutedEventArgs e)
         {
-            // Clear all fields or perform any cancellation logic if necessary
+            ResetFields();
+        }
+
+        private void ResetFields()
+        {
+            MySlider.Value = 0;
+            MyLabel.Content = string.Empty;
+            Nevek.Clear();
+            Email.Clear();
+            VIP.IsChecked = false;
+            Szuletes.SelectedDate = null;
+            Szobaszam.SelectedItem = null;
+            Ferohely.SelectedItem = null;
+            Osszeg.Content = string.Empty;
+            FoglalasKezdete.SelectedDate = null;
+            FoglalasVege.SelectedDate = null;
         }
 
         private void MySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -125,6 +138,9 @@ namespace KikeletPanzio
             public string Szobaszam { get; set; }
             public string Fo { get; set; }
             public int Osszeg { get; set; }
+            public DateTime Timestamp { get; set; } // A foglalás aktuális időpontja
+            public DateTime? Kezdet { get; set; } // Foglalás kezdeti időpontja
+            public DateTime? Vege { get; set; } // Foglalás záró időpontja
         }
     }
 }
